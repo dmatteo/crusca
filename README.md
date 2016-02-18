@@ -1,4 +1,5 @@
 # templ18n
+[![Build Status](https://travis-ci.org/dmatteo/templ18n.svg?branch=master)](https://travis-ci.org/dmatteo/templ18n)
 
 ## TODO:
 - [x] find a name
