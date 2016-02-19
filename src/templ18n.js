@@ -19,8 +19,21 @@ export default (srcCode, calleeName = TRANSLATION_FUNC_NAME, genOptions = CODEGE
 
   const newTree = replace(AST, {
     enter: (node, parent) => {
-      if (node.type === 'TemplateLiteral' && parent.type === 'CallExpression') {
-        if (parent.callee.name === calleeName) {
+      let isTarget;
+      if (node.type === 'TemplateLiteral') {
+
+        switch(parent.type) {
+          case 'CallExpression':
+            isTarget = parent.callee.name === calleeName;
+            break;
+          case 'TaggedTemplateExpression':
+            isTarget = parent.tag.name === calleeName;
+            break;
+          default:
+            isTarget = false;
+        }
+
+        if (isTarget) {
           return {
             type: 'Literal',
             value: getString(srcCode, node)
