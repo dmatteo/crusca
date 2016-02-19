@@ -36,9 +36,10 @@ export default (srcCode, calleeName = TRANSLATION_FUNC_NAME, genOptions = CODEGE
         if (isTarget) {
           return {
             type: 'Literal',
-            value: getString(srcCode, node)
+            value: getString(node)
           }
         }
+
       }
     },
     fallback: 'iteration'
@@ -48,6 +49,13 @@ export default (srcCode, calleeName = TRANSLATION_FUNC_NAME, genOptions = CODEGE
 
 }
 
-const getString = (code, node) => {
-  return code.slice(node.start + 1, node.end - 1);
+const getString = (node) => {
+  return node.quasis.reduce((prev, curr, idx) => {
+    const exprId = idx < node.quasis.length - 1 ? `{${idx}}` : '';
+    return `${prev}${curr.value.raw}${exprId}`;
+  }, '');
+};
+
+const prettyPrintNode = (node) => {
+  console.log(JSON.stringify(node, null, 4));
 };
