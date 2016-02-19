@@ -1,6 +1,6 @@
 'use strict';
 
-import templ18n from '../lib/templ18n';
+import templ18n from '../src/templ18n';
 
 import Promise from 'bluebird';
 import expect from 'unexpected';
