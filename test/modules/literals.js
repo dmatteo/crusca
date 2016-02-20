@@ -40,6 +40,13 @@ export default () => {
   // { MemberExpression } using { ThisExpression }
   const thisExpression = t('Template Literal with ${this.expr} Member Expression');
 
+  function tag(strings, ...values) {
+    console.log(strings.raw[0]);
+    // "string text line 1 \\n string text line 2"
+  }
+
+  const taggedTemplate = tag('string text line 1 \n string text line 2');
+
   /**********************************************************************************************
    *** HERE STARTS THE LET WORLD ****************************************************************
    *********************************************************************************************/

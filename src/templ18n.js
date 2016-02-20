@@ -1,27 +1,24 @@
 'use strict';
 
 const acorn = require('acorn-jsx/inject')(require('acorn'));
-import { replace } from 'estraverse';
-import { print } from 'recast';
+import { traverse } from 'estraverse';
 
 const TRANSLATION_FUNC_NAME = 't';
-const CODEGEN_OPTIONS = {
-  quote: 'single',
-  tabWidth: 2
-};
 
-export default (srcCode, calleeName = TRANSLATION_FUNC_NAME, genOptions = CODEGEN_OPTIONS) => {
+export const extract = (srcCode, calleeName = TRANSLATION_FUNC_NAME) => {
 
   const AST = acorn.parse(srcCode, {
     sourceType: 'module',
     plugins: { jsx: true }
   });
 
-  const newTree = replace(AST, {
-    enter: (node, parent) => {
-      let isTarget;
-      if (node.type === 'TemplateLiteral') {
+  const strings = [];
 
+  traverse(AST, {
+    enter: (node, parent) => {
+      if (node.type === 'TemplateLiteral' || node.type === 'Literal') {
+
+        let isTarget;
         switch(parent.type) {
           case 'CallExpression':
             isTarget = parent.callee.name === calleeName;
@@ -34,10 +31,7 @@ export default (srcCode, calleeName = TRANSLATION_FUNC_NAME, genOptions = CODEGE
         }
 
         if (isTarget) {
-          return {
-            type: 'Literal',
-            value: getString(node)
-          }
+          strings.push(getString(node));
         }
 
       }
@@ -45,11 +39,15 @@ export default (srcCode, calleeName = TRANSLATION_FUNC_NAME, genOptions = CODEGE
     fallback: 'iteration'
   });
 
-  return print(newTree, genOptions).code;
+  return strings;
 
-}
+};
 
 const getString = (node) => {
+  if (node.type === 'Literal') {
+    return node.value;
+  }
+
   return node.quasis.reduce((prev, curr, idx) => {
     const exprId = idx < node.quasis.length - 1 ? `{${idx}}` : '';
     return `${prev}${curr.value.raw}${exprId}`;

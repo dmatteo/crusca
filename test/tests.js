@@ -1,59 +1,57 @@
 'use strict';
 
-import templ18n from '../src/templ18n';
+import { extract } from '../src/templ18n';
 
 import Promise from 'bluebird';
 import expect from 'unexpected';
 
 const readFile = Promise.promisify(require("fs").readFile);
-const acorn = require('acorn-jsx/inject')(require('acorn'));
 
 describe('templ18n', () => {
 
-  const astObject = function(code, srcType = 'module') {
-    this.ast = {};
-    this.code = code || '';
+  describe('should extract strings', () => {
 
-    this.getAST = () => {
-      this.ast = acorn.parse(this.code, {
-        sourceType: srcType,
-        plugins: { jsx: true }
-      });
+    const fixturesDir = './test/modules';
 
-      return this;
-    };
+    const extractedStrings = [
+      'Template Literal',
+      'Template Literal with {0} variable',
+      'Template Literal with {0} and {1} variables',
+      'Tagged Template Expression',
+      'Tagged Template {0} with {1} Expr',
+      'Template Literal with {0} Binary Expression',
+      'Template Literal with {0} Call Expression',
+      'Template Literal with {0} Member Expression',
+      'Template Literal with {0} Member Expression'
+    ];
 
-    this.astToString = () => {
-      this.code = JSON.stringify(this.ast, (key, value) => {
-        if (key === "start") return undefined;
-        else if (key === "end") return undefined;
+    it('from an ES6 module', () => {
 
-        else return value;
-      });
+      return readFile(`${fixturesDir}/es6.js`, 'utf8')
+        .then((code) => {
+          const strings = extract(code);
+          return expect(strings, 'to equal', extractedStrings);
+        });
 
-      return this;
-    };
-  };
+    });
 
-  expect.addAssertion('<string> to be functionally equivalent <string>', function (expect, subject, value) {
-    const subjectAST = new astObject(subject);
-    const valueAST = new astObject(value);
-    expect(subjectAST.getAST().astToString().code, 'to equal', valueAST.getAST().astToString().code);
-  });
+    it('from an CommonJS module', () => {
 
-  describe('es6-modules', () => {
+      return readFile(`${fixturesDir}/cjs.js`, 'utf8')
+        .then((code) => {
+          const strings = extract(code);
+          return expect(strings, 'to equal', extractedStrings);
+        });
 
-    const fixturesDir = './test/es6Modules';
+    });
 
-    it('should convert TemplateLiteral(s) to Literal(s)', () => {
+    it('from an AMD module', () => {
 
-      Promise.all([
-        readFile(`${fixturesDir}/templateLiterals.js`, 'utf8'),
-        readFile(`${fixturesDir}/literals.js`, 'utf8')
-      ]).then((files) => {
-        const code = templ18n(files[0]);
-        return expect(code, 'to be functionally equivalent', files[1]);
-      });
+      return readFile(`${fixturesDir}/amd.js`, 'utf8')
+        .then((code) => {
+          const strings = extract(code);
+          return expect(strings, 'to equal', extractedStrings);
+        });
 
     });
   });
