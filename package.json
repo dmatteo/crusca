@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "babel src --out-dir lib/",
     "prepublish": "npm run compile",
-    "prepare-publish": "npm run prebublish && git add lib/templ18n.js && git commit -m 'update built files'",
+    "prepare-publish": "npm run compile && git add lib/templ18n.js && git commit -m 'update built files'",
     "test": "mocha --compilers js:babel-register"
   },
   "author": "Domenico Matteo <matteo.domenico@gmail.com>",
