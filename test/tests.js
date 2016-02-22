@@ -9,20 +9,20 @@ const readFile = Promise.promisify(require("fs").readFile);
 
 describe('templ18n', () => {
 
-  describe('should extract strings', () => {
+  describe('[extract] should extract translatable string', () => {
 
     const fixturesDir = './test/modules';
 
     const extractedStrings = [
-      'Template Literal',
-      'Template Literal with {0} variable',
-      'Template Literal with {0} and {1} variables',
-      'Tagged Template Expression',
-      'Tagged Template {0} with {1} Expr',
-      'Template Literal with {0} Binary Expression',
-      'Template Literal with {0} Call Expression',
-      'Template Literal with {0} Member Expression',
-      'Template Literal with {0} Member Expression'
+      { line: 13, value: 'Template Literal' },
+      { line: 16, value: 'Template Literal with {0} variable' },
+      { line: 19, value: 'Template Literal with {0} and {1} variables' },
+      { line: 22, value: 'Tagged Template Expression' },
+      { line: 25, value: 'Tagged Template {0} with {1} Expr' },
+      { line: 28, value: 'Template Literal with {0} Binary Expression' },
+      { line: 31, value: 'Template Literal with {0} Call Expression' },
+      { line: 34, value: 'Template Literal with {0} Member Expression' },
+      { line: 37, value: 'Template Literal with {0} Member Expression' }
     ];
 
     it('from an ES6 module', () => {

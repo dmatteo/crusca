@@ -9,6 +9,7 @@ export const extract = (srcCode, calleeName = TRANSLATION_FUNC_NAME) => {
 
   const AST = acorn.parse(srcCode, {
     sourceType: 'module',
+    locations: true,
     plugins: { jsx: true }
   });
 
@@ -31,7 +32,10 @@ export const extract = (srcCode, calleeName = TRANSLATION_FUNC_NAME) => {
         }
 
         if (isTarget) {
-          strings.push(getString(node));
+          strings.push({
+            line: node.loc.start.line,
+            value: getString(node)
+          });
         }
 
       }

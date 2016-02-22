@@ -1,10 +1,7 @@
 define(['jquery'] , function ($) {
   'use strict';
 
-  const t = (string) => string;
-
   return () => {
-
     const one = '',
       two = '',
       member = { prop: 'bananas' },
@@ -47,6 +44,8 @@ define(['jquery'] , function ($) {
 
     // { CallExpression } using { TemplateLiteral } using { Identifier }
     // const callExprAndComplexLiterals = t(`Template Literal with ${t(`moar ${one}`)} Call Expression`);
+
+    const t = (string) => string;
   };
 
 });
