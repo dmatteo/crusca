@@ -47,6 +47,40 @@ export const extract = (srcCode, calleeName = TRANSLATION_FUNC_NAME) => {
 
 };
 
+/**
+ *
+ * @param { {line: Number, value: String}[] } tStrings, the output of `extract` (an array of objects
+ *    containing translation key and line number in the relative file
+ *
+ * @param { String } filePath
+ *
+ * @param { Object.<Array> } existingStrings, same as result of this method
+ *
+ * @returns { Object.<Array>} } An object containing the translation keys and an array of location where
+ *    those strings have been found
+ */
+export const tagKeys = (tStrings, filePath, existingStrings = {}) => {
+
+  return tStrings.reduce((result, key) => {
+
+    // #: path/to/file:lineNumber
+    const line = `#: ${filePath}:${key.line}`;
+
+    if (Array.isArray(result[key.value])) {
+
+      // avoid duplicates when, for example, scanning the same file twice
+      if (result[key.value].indexOf(line) === -1) {
+        result[key.value].push(line);
+      }
+
+      return result;
+    } else {
+      return Object.assign(result, {[key.value]: [line]});
+    }
+  }, existingStrings);
+
+};
+
 const getString = (node) => {
   if (node.type === 'Literal') {
     return node.value;

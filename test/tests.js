@@ -1,6 +1,6 @@
 'use strict';
 
-import { extract } from '../src/templ18n';
+import { extract, tagKeys } from '../src/templ18n';
 
 import Promise from 'bluebird';
 import expect from 'unexpected';
@@ -11,8 +11,7 @@ describe('templ18n', () => {
 
   describe('[extract] should extract translatable string', () => {
 
-    const fixturesDir = './test/modules';
-
+    const fixturesDir = './test/extract';
     const extractedStrings = [
       { line: 13, value: 'Template Literal' },
       { line: 16, value: 'Template Literal with {0} variable' },
@@ -56,4 +55,105 @@ describe('templ18n', () => {
     });
   });
 
+  describe('[tagKeys] should create an object with keys and locations', () => {
+
+    const fixturesDir = './test/tagKeys';
+
+    it('reading from 1 file, starting empty', () => {
+      const filePath = `${fixturesDir}/simple.js`;
+      return readFile(filePath, 'utf8')
+        .then((code) => {
+          const keys = extract(code);
+          const taggedKeys = tagKeys(keys, filePath);
+          return expect(taggedKeys, 'to equal', {
+              'Some unique string': ['#: ./test/tagKeys/simple.js:7'],
+              'String number 2': ['#: ./test/tagKeys/simple.js:9']
+            }
+          )
+
+        });
+    });
+
+    it('reading from 1 file, with key reusing', () => {
+      const filePath = `${fixturesDir}/withReuse.js`;
+      return readFile(filePath, 'utf8')
+        .then((code) => {
+          const keys = extract(code);
+          const taggedKeys = tagKeys(keys, filePath);
+          return expect(taggedKeys, 'to equal', {
+              'Some not so unique string': [
+                '#: ./test/tagKeys/withReuse.js:7',
+                '#: ./test/tagKeys/withReuse.js:9'
+              ]
+            }
+          )
+
+        });
+    });
+
+    it('reading from 1 file, starting non empty', () => {
+      const startingValues = {
+        'Some String': ['# ./path/to/file:42']
+      };
+
+      const filePath = `${fixturesDir}/simple.js`;
+      return readFile(filePath, 'utf8')
+        .then((code) => {
+          const keys = extract(code);
+          const taggedKeys = tagKeys(keys, filePath, startingValues);
+          return expect(taggedKeys, 'to equal', {
+            'Some String': ['# ./path/to/file:42'],
+            'Some unique string': ['#: ./test/tagKeys/simple.js:7'],
+            'String number 2': ['#: ./test/tagKeys/simple.js:9']
+          })
+
+        });
+    });
+
+    it('reading from 2 files, without key reusing', () => {
+      const filePaths = [
+        `${fixturesDir}/simple.js`,
+        `${fixturesDir}/simple2.js`
+      ];
+
+      return Promise.all([readFile(filePaths[0], 'utf8'), readFile(filePaths[1], 'utf8')])
+        .then((data) => {
+          const taggedKeys = data.reduce((result, code, idx) => {
+            const keys = extract(code);
+            return tagKeys(keys, filePaths[idx], result)
+          }, {});
+
+          return expect(taggedKeys, 'to equal', {
+            'Some unique string': ['#: ./test/tagKeys/simple.js:7'],
+            'String number 2': ['#: ./test/tagKeys/simple.js:9'],
+            'A different string': ['#: ./test/tagKeys/simple2.js:7']
+          });
+        });
+    });
+
+    it('reading from 2 files, with key reusing', () => {
+      const filePaths = [
+        `${fixturesDir}/simple.js`,
+        `${fixturesDir}/reuseFromSimple.js`
+      ];
+
+      return Promise.all([readFile(filePaths[0], 'utf8'), readFile(filePaths[1], 'utf8')])
+        .then((data) => {
+          const taggedKeys = data.reduce((result, code, idx) => {
+            const keys = extract(code);
+            return tagKeys(keys, filePaths[idx], result)
+          }, {});
+
+          return expect(taggedKeys, 'to equal', {
+            'Some unique string': ['#: ./test/tagKeys/simple.js:7'],
+            'String number 2': [
+              '#: ./test/tagKeys/simple.js:9',
+              '#: ./test/tagKeys/reuseFromSimple.js:9'
+            ],
+            'Some other very unique string': ['#: ./test/tagKeys/reuseFromSimple.js:7']
+          });
+        });
+    });
+
+  });
 });
