@@ -1,6 +1,6 @@
 'use strict';
 
-import { extract, tagKeys } from '../src/templ18n';
+import { extract, tagKeys, generatePot } from '../src/templ18n';
 
 import Promise from 'bluebird';
 import expect from 'unexpected';
@@ -153,6 +153,29 @@ describe('templ18n', () => {
             'Some other very unique string': ['#: ./test/tagKeys/reuseFromSimple.js:7']
           });
         });
+    });
+
+  });
+
+  describe('[generatePot] should generate the data to write in a .pot file', () => {
+
+    const fixturesDir = './test/generatePot';
+
+    it('comparing to file `./test/generatePot/template.pot`', () => {
+
+      const taggedKeys = {
+        'Some unique string': ['#: ./test/tagKeys/simple.js:7'],
+        'String number 2': [
+          '#: ./test/tagKeys/simple.js:9',
+          '#: ./test/tagKeys/reuseFromSimple.js:9'
+        ],
+        'Some other very unique string': ['#: ./test/tagKeys/reuseFromSimple.js:7']
+      };
+
+      return readFile(`${fixturesDir}/template.pot`, 'utf8').then((fileData) => {
+        return expect(generatePot(taggedKeys), 'to be', fileData);
+      });
+
     });
 
   });

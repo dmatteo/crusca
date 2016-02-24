@@ -4,6 +4,25 @@ const acorn = require('acorn-jsx/inject')(require('acorn'));
 import { traverse } from 'estraverse';
 
 const TRANSLATION_FUNC_NAME = 't';
+const DEFAULT_HEADER = `# SOME DESCRIPTIVE TITLE.
+    # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+    # This file is distributed under the same license as the PACKAGE package.
+    # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+    #
+    #, fuzzy
+    msgid ""
+    msgstr ""
+    "Project-Id-Version: PACKAGE VERSION"
+    "Report-Msgid-Bugs-To: "
+    "POT-Creation-Date: 2016-02-09 06:18+0000"
+    "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE"
+    "Last-Translator: FULL NAME <EMAIL@ADDRESS>"
+    "Language-Team: LANGUAGE <LL@li.org>"
+    "Language: "
+    "MIME-Version: 1.0"
+    "Content-Type: text/plain; charset=UTF-8"
+    "Content-Transfer-Encoding: 8bit"
+    `;
 
 export const extract = (srcCode, calleeName = TRANSLATION_FUNC_NAME) => {
 
@@ -72,13 +91,29 @@ export const tagKeys = (tStrings, filePath, existingStrings = {}) => {
       if (result[key.value].indexOf(line) === -1) {
         result[key.value].push(line);
       }
-
       return result;
     } else {
       return Object.assign(result, {[key.value]: [line]});
     }
   }, existingStrings);
 
+};
+
+export const generatePot = (taggedKeys, header = DEFAULT_HEADER) => {
+  const keyRecords = Object.keys(taggedKeys).map((key) => {
+    const fileLines = taggedKeys[key].reduce((result, line) => {
+      return `${result}
+              ${line}`;
+    }, '');
+
+    return `${fileLines}
+      msgid "${key}"
+      msgstr ""
+      `;
+  }).join('');
+
+  const spaces = /\n */g;
+  return (header + keyRecords).replace(spaces, '\n');
 };
 
 const getString = (node) => {
