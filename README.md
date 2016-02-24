@@ -4,8 +4,9 @@
 ## TODO:
 - [x] find a name
 - [ ] find a better name
-- [ ] output a .pot files for gettext instead of rewriting the file
+- [x] output a .pot files for gettext instead of rewriting the file
 - [ ] write a decent README
+- [ ] add TypeFlow instead of JSDoc
 - [ ] throw if using normal functions instead of tagged templates when vars are present
 
 ![](http://i.giphy.com/Yl5aO3gdVfsQ0.gif)
