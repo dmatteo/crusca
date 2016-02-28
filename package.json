@@ -1,12 +1,12 @@
 {
-  "name": "templ18n",
-  "version": "0.0.1",
+  "name": "crusca",
+  "version": "0.1.0",
   "description": "",
-  "files": "lib/templ18n",
+  "main": "lib/crusca",
   "scripts": {
     "compile": "babel src --out-dir lib/",
     "prepublish": "npm run compile",
-    "prepare-publish": "npm run compile && git add lib/templ18n.js && git commit -m 'update built files'",
+    "prepare-publish": "npm run compile && git add lib/crusca.js && git commit -m 'update built files'",
     "test": "mocha --compilers js:babel-register"
   },
   "author": "Domenico Matteo <matteo.domenico@gmail.com>",

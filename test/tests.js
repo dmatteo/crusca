@@ -1,13 +1,13 @@
 'use strict';
 
-import { extract, tagKeys, generatePot } from '../src/templ18n';
+import { extract, tagKeys, generatePot } from '../src/crusca';
 
 import Promise from 'bluebird';
 import expect from 'unexpected';
 
 const readFile = Promise.promisify(require("fs").readFile);
 
-describe('templ18n', () => {
+describe('crusca.js', () => {
 
   describe('[extract] should extract translatable string', () => {
 

@@ -1,15 +1,24 @@
-# templ18n
-[![Build Status](https://travis-ci.org/dmatteo/templ18n.svg?branch=master)](https://travis-ci.org/dmatteo/templ18n)
+# crusca
+[![Build Status](https://travis-ci.org/dmatteo/crusca.svg?branch=master)](https://travis-ci.org/dmatteo/crusca)
 
 ## TODO:
 - [x] find a name
-- [ ] find a better name
+- [x] find a better name
 - [x] output a .pot files for gettext instead of rewriting the file
+- [ ] add test coverage
 - [ ] write a decent README
 - [ ] add TypeFlow instead of JSDoc
 - [ ] throw if using normal functions instead of tagged templates when vars are present
 
 ![](http://i.giphy.com/Yl5aO3gdVfsQ0.gif)
+
+## Test
+
+Tests are run against the uncompiled source code
+
+```js
+npm test
+```
 
 ## License
 
