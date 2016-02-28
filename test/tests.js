@@ -74,6 +74,17 @@ describe('crusca.js', () => {
         });
     });
 
+    it('reading from 1 file with no strings, starting empty', () => {
+      const filePath = `${fixturesDir}/noStrings.js`;
+      return readFile(filePath, 'utf8')
+        .then((code) => {
+          const keys = extract(code);
+          const taggedKeys = tagKeys(keys, filePath);
+          return expect(taggedKeys, 'to equal', {})
+
+        });
+    });
+
     it('reading from 1 file, with key reusing', () => {
       const filePath = `${fixturesDir}/withReuse.js`;
       return readFile(filePath, 'utf8')
@@ -105,6 +116,23 @@ describe('crusca.js', () => {
             'Some String': ['# ./path/to/file:42'],
             'Some unique string': ['#: ./test/tagKeys/simple.js:7'],
             'String number 2': ['#: ./test/tagKeys/simple.js:9']
+          })
+
+        });
+    });
+
+    it('reading from 1 file with no strings, starting non empty', () => {
+      const startingValues = {
+        'Some String': ['# ./path/to/file:42']
+      };
+
+      const filePath = `${fixturesDir}/noStrings.js`;
+      return readFile(filePath, 'utf8')
+        .then((code) => {
+          const keys = extract(code);
+          const taggedKeys = tagKeys(keys, filePath, startingValues);
+          return expect(taggedKeys, 'to equal', {
+            'Some String': ['# ./path/to/file:42']
           })
 
         });
