@@ -21,7 +21,8 @@ describe('crusca.js', () => {
       { line: 28, value: 'Template Literal with {0} Binary Expression' },
       { line: 31, value: 'Template Literal with {0} Call Expression' },
       { line: 34, value: 'Template Literal with {0} Member Expression' },
-      { line: 37, value: 'Template Literal with {0} Member Expression' }
+      { line: 37, value: 'Template Literal with {0} Member Expression' },
+      { line: 40, value: 'String Literal' }
     ];
 
     it('from an ES6 module', () => {

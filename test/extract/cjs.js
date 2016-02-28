@@ -36,6 +36,9 @@ const stringsContainer = () => {
   // { MemberExpression } using { ThisExpression }
   const thisExpression = t(`Template Literal with ${this.expr} Member Expression`);
 
+  // Dear 'ol StringLiteral
+  const plain = t('String Literal');
+
   /************************************************************************************
    * Nested translation functions are not yet supported
    ***********************************************************************************/
