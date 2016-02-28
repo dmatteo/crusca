@@ -12,8 +12,7 @@
   "author": "Domenico Matteo <matteo.domenico@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "acorn": "3.0.2",
-    "acorn-jsx": "2.0.1",
+    "babylon": "6.5.2",
     "estraverse": "4.1.1",
     "recast": "0.11.0"
   },

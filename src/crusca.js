@@ -1,8 +1,9 @@
 'use strict';
 
-const acorn = require('acorn-jsx/inject')(require('acorn'));
+const babylon = require('babylon');
 import { traverse } from 'estraverse';
 
+const STRING_TYPES = ['TemplateLiteral', 'StringLiteral'];
 const TRANSLATION_FUNC_NAME = 't';
 const DEFAULT_HEADER = `# SOME DESCRIPTIVE TITLE.
     # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -26,17 +27,20 @@ const DEFAULT_HEADER = `# SOME DESCRIPTIVE TITLE.
 
 export const extract = (srcCode, calleeName = TRANSLATION_FUNC_NAME) => {
 
-  const AST = acorn.parse(srcCode, {
+  const AST = babylon.parse(srcCode, {
     sourceType: 'module',
     locations: true,
-    plugins: { jsx: true }
+    plugins: [
+      'jsx',
+      'objectRestSpread'
+    ]
   });
 
   const strings = [];
 
   traverse(AST, {
     enter: (node, parent) => {
-      if (node.type === 'TemplateLiteral' || node.type === 'Literal') {
+      if (STRING_TYPES.indexOf(node.type) !== -1) {
 
         let isTarget;
         switch(parent.type) {
@@ -117,7 +121,7 @@ export const generatePot = (taggedKeys, header = DEFAULT_HEADER) => {
 };
 
 const getString = (node) => {
-  if (node.type === 'Literal') {
+  if (node.type === 'StringLiteral') {
     return node.value;
   }
 
@@ -127,6 +131,8 @@ const getString = (node) => {
   }, '');
 };
 
-const prettyPrintNode = (node) => {
-  console.log(JSON.stringify(node, null, 4));
+const prettyPrintNode = (...nodes) => {
+  nodes.map((n) => {
+    console.log(JSON.stringify(n, null, 2));
+  });
 };
