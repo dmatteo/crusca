@@ -1,7 +1,7 @@
 {
   "name": "crusca",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Parse source code and extract translation strings. Like gettext, but ES6 compatible",
   "main": "lib/crusca",
   "scripts": {
     "compile": "babel src --out-dir lib/",
@@ -9,12 +9,20 @@
     "prepare-publish": "npm run compile && git add lib/crusca.js && git commit -m 'update built files'",
     "test": "mocha --compilers js:babel-register"
   },
+  "keywords": [
+    "template strings",
+    "template literals",
+    "gettext",
+    "translations",
+    "i18n",
+    "l10n",
+    "es6"
+  ],
   "author": "Domenico Matteo <matteo.domenico@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "babylon": "6.5.2",
-    "estraverse": "4.1.1",
-    "recast": "0.11.0"
+    "estraverse": "4.1.1"
   },
   "devDependencies": {
     "babel": "6.5.2",
