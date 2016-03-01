@@ -207,5 +207,20 @@ describe('crusca.js', () => {
 
     });
 
+    it('escaping double quotes', () => {
+
+      const taggedKeys = {
+        'Some "quoted" unique string': ['#: ./test/tagKeys/simple.js:7']
+      };
+
+      const potFileContent = generatePot(taggedKeys, '');
+
+      expect(potFileContent, 'to be', '\n' +
+        '#: ./test/tagKeys/simple.js:7\n' +
+        'msgid "Some \\"quoted\\" unique string"\n' +
+        'msgstr ""\n');
+
+    });
+
   });
 });

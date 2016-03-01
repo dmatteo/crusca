@@ -110,8 +110,9 @@ export const generatePot = (taggedKeys, header = DEFAULT_HEADER) => {
               ${line}`;
     }, '');
 
+    const escapedKey = key.replace(/"/g, '\\"');
     return `${fileLines}
-      msgid "${key}"
+      msgid "${escapedKey}"
       msgstr ""
       `;
   }).join('');
