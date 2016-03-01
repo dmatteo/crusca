@@ -1,6 +1,6 @@
 {
   "name": "crusca",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Parse source code and extract translation strings. Like gettext, but ES6 compatible",
   "main": "lib/crusca",
   "scripts": {
