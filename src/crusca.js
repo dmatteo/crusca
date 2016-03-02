@@ -13,16 +13,16 @@ const DEFAULT_HEADER = `# SOME DESCRIPTIVE TITLE.
     #, fuzzy
     msgid ""
     msgstr ""
-    "Project-Id-Version: PACKAGE VERSION"
-    "Report-Msgid-Bugs-To: "
-    "POT-Creation-Date: 2016-02-09 06:18+0000"
-    "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE"
-    "Last-Translator: FULL NAME <EMAIL@ADDRESS>"
-    "Language-Team: LANGUAGE <LL@li.org>"
-    "Language: "
-    "MIME-Version: 1.0"
-    "Content-Type: text/plain; charset=UTF-8"
-    "Content-Transfer-Encoding: 8bit"
+    "Project-Id-Version: PACKAGE VERSION\\n"
+    "Report-Msgid-Bugs-To: \\n"
+    "POT-Creation-Date: 2016-02-09 06:18+0000\\n"
+    "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n"
+    "Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n"
+    "Language-Team: LANGUAGE <LL@li.org>\\n"
+    "Language: \\n"
+    "MIME-Version: 1.0\\n"
+    "Content-Type: text/plain; charset=UTF-8\\n"
+    "Content-Transfer-Encoding: 8bit\\n"
     `;
 
 export const extract = (srcCode, calleeName = TRANSLATION_FUNC_NAME) => {
